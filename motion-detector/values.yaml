@@ -12,7 +12,7 @@ image:
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.1.0"
+  tag: "v1.2.1"
 
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -89,19 +89,9 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-volumes:
-  - name: data-volume
-    persistentVolumeClaim:
-      claimName: motion-detector-pvc
+volumes: []
 
-volumeMounts:
-  - name: data-volume
-    mountPath: /data
-
-persistentVolumeClaim:
-  enabled: true
-  name: motion-detector-pvc
-  size: 5Gi
+volumeMounts: []
 
 configMap:
   enabled: true
@@ -109,9 +99,10 @@ configMap:
     STREAM_URL: "http://camera:5000/video_feed"
     DISCORD_WEBHOOK_URL: ""
     MOTION_SENSITIVITY: "2000"
-    MOTION_COUNT_THRESHOLD: "7"
+    MOTION_COUNT_THRESHOLD: "10"
 
-nodeSelector: {}
+nodeSelector:
+  kubernetes.io/hostname: rastberry
 
 tolerations: []
 
