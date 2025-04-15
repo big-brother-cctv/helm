@@ -12,7 +12,7 @@ image:
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.0.8"
+  tag: "v1.1.1"
 
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -99,7 +99,14 @@ volumeMounts:
 configMap:
   enabled: true
   data:
-    CAMERA: "0"
+    CAMERA_SOURCE: "0"
+    FRAME_WIDTH: "640"
+    FRAME_HEIGHT: "480"
+    FRAME_RATE: "30"
+    JPEG_QUALITY: "80"
+    FOURCC: "MJPG"
+    SLEEP_TIME: "0.1"
+    ROTATE: "0"
 
 nodeSelector:
   kubernetes.io/hostname: rastberry

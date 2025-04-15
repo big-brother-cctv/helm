@@ -6,3 +6,4 @@ data:
   STREAM_URL: "{{ .Values.configMap.data.STREAM_URL }}"
   DISCORD_WEBHOOK_URL: "{{ .Values.configMap.data.DISCORD_WEBHOOK_URL }}"
   MOTION_SENSITIVITY: "{{ .Values.configMap.data.MOTION_SENSITIVITY }}"
+  MOTION_COUNT_THRESHOLD: "{{ .Values.configMap.data.MOTION_COUNT_THRESHOLD }}"
