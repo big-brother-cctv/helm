@@ -1,4 +1,4 @@
-# Default values for mediamtx.
+# Default values for telescreen.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -8,11 +8,11 @@ revisionHistoryLimit: 2
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: bluenviron/mediamtx
+  repository: ghcr.io/big-brother-cctv/telescreen
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "v0.2.9"
 
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -42,40 +42,35 @@ podLabels: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
-securityContext:
-  runAsUser: 0
-  privileged: true
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
 
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
+  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
-  ports:
-    - name: rtsp
-      port: 8554
-      targetPort: 8554
-    - name: hls
-      port: 8888
-      targetPort: 8888
-    - name: webrtc
-      port: 8889
-      targetPort: 8889
+  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+  port: 80
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   enabled: true
-  className: "traefik"
-  annotations:
-    cert-manager.io/cluster-issuer: "le-cluster-issuer"
-  portName: hls
+  className: "cloudflare-tunnel"
+  annotations: []
   hosts:
-    - host: mediamtx.local
+    - host: telescreen.rdvl.net
       paths:
         - path: /
           pathType: Prefix
   tls:
-    - hosts:
-        - mediamtx.local
-      secretName: mediamtx-tls
+    - secretName: telescreen-tls
+      hosts:
+        - telescreen.rdvl.net
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -103,8 +98,12 @@ volumes: []
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts: []
 
-nodeSelector:
-  kubernetes.io/hostname: rastberry
+configMap:
+  enabled: true
+  data:
+    STREAM_URL: "http://mediamtx:8888/stream.m3u8"
+
+nodeSelector: {}
 
 tolerations: []
 

@@ -8,11 +8,11 @@ revisionHistoryLimit: 2
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: ghcr.io/motion-detector/motion-detector
+  repository: ghcr.io/big-brother-cctv/motion-detector
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.2.1"
+  tag: "v1.4.0"
 
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -59,7 +59,7 @@ service:
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
-  enabled: true
+  enabled: false
   className: "traefik"
   annotations: {}
   hosts:
@@ -89,17 +89,15 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-volumes: []
+volumes:
+  - name: motion-conf
+    configMap:
+      name: motion-detector-config
 
-volumeMounts: []
-
-configMap:
-  enabled: true
-  data:
-    STREAM_URL: "http://camera:5000/video_feed"
-    DISCORD_WEBHOOK_URL: ""
-    MOTION_SENSITIVITY: "2000"
-    MOTION_COUNT_THRESHOLD: "10"
+volumeMounts:
+  - name: motion-conf
+    mountPath: /etc/motion/motion.conf
+    subPath: motion.conf
 
 nodeSelector:
   kubernetes.io/hostname: rastberry

@@ -3,7 +3,28 @@ kind: ConfigMap
 metadata:
   name: {{ include "motion-detector.fullname" . }}-config
 data:
-  STREAM_URL: "{{ .Values.configMap.data.STREAM_URL }}"
-  DISCORD_WEBHOOK_URL: "{{ .Values.configMap.data.DISCORD_WEBHOOK_URL }}"
-  MOTION_SENSITIVITY: "{{ .Values.configMap.data.MOTION_SENSITIVITY }}"
-  MOTION_COUNT_THRESHOLD: "{{ .Values.configMap.data.MOTION_COUNT_THRESHOLD }}"
+  DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1234..."
+  COOLDOWN_SECONDS: "10"
+  motion.conf: |
+    daemon off
+    stream_localhost off
+    netcam_url rtsp://mediamtx:8554/stream
+    width 1280
+    height 720
+    framerate 30
+
+    picture_output on
+    output_pictures best
+    picture_filename %Y-%m-%d_%H-%M-%S
+    target_dir /tmp/motion_images
+
+    on_event_end /usr/local/bin/on_event_end.sh
+
+    camera_name camera
+    threshold 800
+    sensitivity 30
+    noise 5
+    notification_timeout 60
+    min_motion_frames 5
+    gap 10
+    movie_output off
