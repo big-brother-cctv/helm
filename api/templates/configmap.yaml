@@ -15,3 +15,6 @@ data:
     spring.jpa.hibernate.ddl-auto=update
     management.endpoints.web.exposure.include=health
     management.endpoint.health.show-details=always
+    spring.servlet.multipart.max-file-size=10GB
+    spring.servlet.multipart.max-request-size=10GB
+    internal.api.token=internal-token-pro

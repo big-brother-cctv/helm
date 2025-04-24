@@ -12,7 +12,7 @@ image:
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.3.4"
+  tag: "v1.4.6"
 
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -55,7 +55,7 @@ service:
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
-  enabled: true
+  enabled: false
   className: "traefik"
   annotations: {}
   hosts:
@@ -99,15 +99,11 @@ volumeMounts:
 configMap:
   enabled: true
   data:
-    CAMERA_DEVICE: "/dev/video0"
-    RESOLUTION: "1280x720"
-    FRAMERATE: "30"
-    RTSP_URL: "rtsp://mediamtx:8554/stream"
-    VIDEO_CODEC: "libx264"
-    PRESET: "ultrafast"
-    TUNE: "zerolatency"
-    BUFFER_SIZE: "1000000"
-    ROTATE: "180"
+    CAMERA_NAME: "Salon"
+    API_URL: http://api:8080/api/cameras
+    INTERNAL_TOKEN: "internal-token-pro"
+    CONFIG_URL: "http://api:8080/api/cameras/1"
+    POLL_INTERVAL: "10"
 
 nodeSelector:
   kubernetes.io/hostname: rastberry

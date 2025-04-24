@@ -3,12 +3,5 @@ kind: ConfigMap
 metadata:
   name: {{ include "camera.fullname" . }}-config
 data:
-  CAMERA_DEVICE: "{{ .Values.configMap.data.CAMERA_DEVICE }}"
-  RESOLUTION: "{{ .Values.configMap.data.RESOLUTION }}"
-  FRAMERATE: "{{ .Values.configMap.data.FRAMERATE }}"
-  RTSP_URL: "{{ .Values.configMap.data.RTSP_URL }}"
-  VIDEO_CODEC: "{{ .Values.configMap.data.VIDEO_CODEC }}"
-  PRESET: "{{ .Values.configMap.data.PRESET }}"
-  TUNE: "{{ .Values.configMap.data.TUNE }}"
-  BUFFER_SIZE: "{{ .Values.configMap.data.BUFFER_SIZE }}"
-  ROTATE: "{{ .Values.configMap.data.ROTATE }}"
+  INTERNAL_TOKEN: "{{ .Values.configMap.data.INTERNAL_TOKEN }}"
+  CONFIG_URL: "{{ .Values.configMap.data.CONFIG_URL }}"
