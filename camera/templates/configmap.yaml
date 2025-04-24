@@ -3,5 +3,8 @@ kind: ConfigMap
 metadata:
   name: {{ include "camera.fullname" . }}-config
 data:
+  CAMERA_NAME: "{{ .Values.configMap.data.CAMERA_NAME }}"
+  API_URL: "{{ .Values.configMap.data.API_URL }}"
+  MEDIAMTX_URL: "{{ .Values.configMap.data.MEDIAMTX_URL }}"
   INTERNAL_TOKEN: "{{ .Values.configMap.data.INTERNAL_TOKEN }}"
-  CONFIG_URL: "{{ .Values.configMap.data.CONFIG_URL }}"
+  POLL_INTERVAL: "{{ .Values.configMap.data.POLL_INTERVAL }}"
