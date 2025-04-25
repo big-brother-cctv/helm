@@ -1,0 +1,40 @@
+name: Release Helm Charts
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'charts/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.14.0
+
+      - name: Package Helm Charts
+        run: |
+          mkdir -p docs
+          for chart in charts/*/; do
+            helm package "$chart" -d docs
+          done
+
+      - name: Generate index.yaml
+        run: |
+          helm repo index docs --url https://big-brother-cctv.github.io/helm
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add docs
+          git commit -m "🚀 Auto-update Helm repo index" || echo "No changes"
+          git push
