@@ -1,7 +1,0 @@
-apiVersion: v2
-name: motion-detector
-description: Calibre Web is a web app for browsing, reading and downloading eBooks using an existing Calibre database.
-type: application
-version: 1.0.0
-appVersion: "latest"
-icon: https://th.bing.com/th/id/R.60f62bc8e9ee1df35780b8f96753f433?rik=ZIiztdszqSgXHw&pid=ImgRaw&r=0

@@ -1,0 +1,7 @@
+apiVersion: v2
+name: mediamtx
+description: Big Brother CCTV media server.
+type: application
+version: 1.0.0
+appVersion: "latest"
+icon: https://telescreen.rdvl.net/favicon.ico

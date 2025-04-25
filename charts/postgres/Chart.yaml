@@ -1,0 +1,7 @@
+apiVersion: v2
+name: postgres
+description: Big Brother CCTV PostgreSQL database.
+type: application
+version: 1.0.0
+appVersion: "latest"
+icon: https://telescreen.rdvl.net/favicon.ico

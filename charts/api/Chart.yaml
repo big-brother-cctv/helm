@@ -1,0 +1,7 @@
+apiVersion: v2
+name: api
+description: Big Brother CCTV API.
+type: application
+version: 1.0.0
+appVersion: "latest"
+icon: https://telescreen.rdvl.net/favicon.ico
