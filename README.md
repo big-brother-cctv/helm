@@ -38,7 +38,3 @@ To package and update the Helm repository index, run:
 ```
 
 This will package all charts in the `charts/` directory and update the `docs/index.yaml` file.
-
-## License
-
-MIT
