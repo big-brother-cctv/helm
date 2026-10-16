@@ -1,0 +1,21 @@
+dependencies:
+- name: postgres
+  repository: file://../postgres
+  version: 1.0.0
+- name: mediamtx
+  repository: file://../mediamtx
+  version: 1.1.1
+- name: api
+  repository: file://../api
+  version: 1.1.0
+- name: telescreen
+  repository: file://../telescreen
+  version: 1.0.0
+- name: motion-detector
+  repository: file://../motion-detector
+  version: 1.1.0
+- name: camera
+  repository: file://../camera
+  version: 1.0.0
+digest: sha256:f34e3a4e5c847aae0af844db50fab8f2757f08273493537529178d6a55047408
+generated: "2026-10-16T23:57:47.710224079+02:00"

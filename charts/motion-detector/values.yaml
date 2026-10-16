@@ -85,23 +85,30 @@ resources: {}
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 10
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
-volumes:
-  - name: motion-conf
-    configMap:
-      name: motion-detector-config
+# Motion Detection Configuration
+config:
+  apiUrl: "http://api:8080/api/alerts"
+  internalToken: "internal-token-pro"
+  cameraName: "camera"
+  cooldownSeconds: "15"
+  discordWebhook: ""
+  rtspUrl: "rtsp://mediamtx:8554/stream"
+  width: 1280
+  height: 720
+  framerate: 30
+  threshold: 800
+  sensitivity: 30
+  noise: 5
 
-volumeMounts:
-  - name: motion-conf
-    mountPath: /etc/motion/motion.conf
-    subPath: motion.conf
+volumes: []
+volumeMounts: []
 
-nodeSelector:
-  kubernetes.io/hostname: rastberry
+nodeSelector: {}
 
 tolerations: []
 
 affinity: {}
+

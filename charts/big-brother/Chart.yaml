@@ -1,0 +1,42 @@
+apiVersion: v2
+name: big-brother
+description: Complete Big Brother CCTV Surveillance Stack (Telescreen, API, MediaMTX, Postgres, Motion Detector).
+type: application
+version: 1.0.0
+appVersion: "latest"
+icon: https://telescreen.rdvl.net/favicon.ico
+home: https://github.com/big-brother-cctv
+keywords:
+  - cctv
+  - surveillance
+  - video
+  - streaming
+  - security
+  - hls
+  - rtsp
+
+dependencies:
+  - name: postgres
+    version: "1.0.0"
+    repository: "file://../postgres"
+    condition: postgres.enabled
+  - name: mediamtx
+    version: "1.1.1"
+    repository: "file://../mediamtx"
+    condition: mediamtx.enabled
+  - name: api
+    version: "1.1.0"
+    repository: "file://../api"
+    condition: api.enabled
+  - name: telescreen
+    version: "1.0.0"
+    repository: "file://../telescreen"
+    condition: telescreen.enabled
+  - name: motion-detector
+    version: "1.1.0"
+    repository: "file://../motion-detector"
+    condition: motion-detector.enabled
+  - name: camera
+    version: "1.0.0"
+    repository: "file://../camera"
+    condition: camera.enabled

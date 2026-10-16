@@ -2,16 +2,21 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "motion-detector.fullname" . }}-config
+  labels:
+    {{- include "motion-detector.labels" . | nindent 4 }}
 data:
-  DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1234..."
-  COOLDOWN_SECONDS: "10"
+  API_URL: {{ .Values.config.apiUrl | default "http://api:8080/api/alerts" | quote }}
+  INTERNAL_TOKEN: {{ .Values.config.internalToken | default "internal-token-pro" | quote }}
+  CAMERA_NAME: {{ .Values.config.cameraName | default "camera" | quote }}
+  COOLDOWN_SECONDS: {{ .Values.config.cooldownSeconds | default "15" | quote }}
+  DISCORD_WEBHOOK: {{ .Values.config.discordWebhook | default "" | quote }}
   motion.conf: |
     daemon off
     stream_localhost off
-    netcam_url rtsp://mediamtx:8554/stream
-    width 1280
-    height 720
-    framerate 30
+    netcam_url {{ .Values.config.rtspUrl | default "rtsp://mediamtx:8554/stream" }}
+    width {{ .Values.config.width | default 1280 }}
+    height {{ .Values.config.height | default 720 }}
+    framerate {{ .Values.config.framerate | default 30 }}
 
     picture_output on
     output_pictures best
@@ -20,10 +25,10 @@ data:
 
     on_event_end /usr/local/bin/on_event_end.sh
 
-    camera_name camera
-    threshold 800
-    sensitivity 30
-    noise 5
+    camera_name {{ .Values.config.cameraName | default "camera" }}
+    threshold {{ .Values.config.threshold | default 800 }}
+    sensitivity {{ .Values.config.sensitivity | default 30 }}
+    noise {{ .Values.config.noise | default 5 }}
     notification_timeout 60
     min_motion_frames 5
     gap 10

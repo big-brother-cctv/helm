@@ -86,9 +86,18 @@ autoscaling:
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
 
+# Persistent storage for alert snapshots and uploaded data
+persistence:
+  enabled: false
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 5Gi
+  mountPath: /app/data
+
 volumes: []
 volumeMounts: []
 
 nodeSelector: {}
 tolerations: []
 affinity: {}
+

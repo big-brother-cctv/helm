@@ -1,0 +1,38 @@
+========================================================================
+  BIG BROTHER CCTV - SYSTEM DEPLOYMENT SUCCESSFUL
+========================================================================
+
+1. Access Telescreen Web Dashboard:
+{{- if .Values.telescreen.ingress.enabled }}
+  URL: http://{{ (index .Values.telescreen.ingress.hosts 0).host }}
+{{- else }}
+  Forward the Telescreen service port to local machine:
+  kubectl port-forward svc/{{ .Release.Name }}-telescreen 4200:80
+  Open http://localhost:4200 in your browser.
+{{- end }}
+
+2. Backend API Endpoint:
+  Internal Cluster: http://{{ .Release.Name }}-api:8080
+  SSE Alerts Stream: http://{{ .Release.Name }}-api:8080/api/alerts/stream
+
+3. MediaMTX Streaming Server:
+  RTSP Ingest / Playback: rtsp://{{ .Release.Name }}-mediamtx:8554
+  HLS Stream: http://{{ .Release.Name }}-mediamtx:8888
+  API: http://{{ .Release.Name }}-mediamtx:9997
+
+4. In-House Motion Detection & Real-time Alerts:
+{{- if index .Values "motion-detector" "enabled" }}
+  Status: ACTIVE & CONNECTED TO IN-HOUSE API
+  API Target: {{ index .Values "motion-detector" "config" "apiUrl" }}
+  Cooldown: {{ index .Values "motion-detector" "config" "cooldownSeconds" }}s
+{{- else }}
+  Status: DISABLED
+{{- end }}
+
+5. Snapshots Persistence:
+{{- if .Values.api.persistence.enabled }}
+  Alert snapshots persisted via PVC (Size: {{ .Values.api.persistence.size }})
+{{- else }}
+  WARNING: Snapshots persistence is disabled. Data will be ephemeral.
+{{- end }}
+========================================================================

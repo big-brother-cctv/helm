@@ -1,0 +1,67 @@
+# Big Brother CCTV Umbrella Chart - Default Values
+# Controls deployment of all microservices in the Big Brother ecosystem
+
+global:
+  environment: production
+  imagePullSecrets: []
+
+# PostgreSQL Database
+postgres:
+  enabled: true
+  configMap:
+    enabled: true
+    data:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "bigbrother"
+
+# MediaMTX Streaming Server (RTSP, RTMP, HLS, WebRTC)
+mediamtx:
+  enabled: true
+
+# Big Brother Core Go API
+api:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 10Gi
+    mountPath: /app/data
+  config:
+    port: "8080"
+    dbHost: "big-brother-postgres"
+    dbPort: "5432"
+    dbUser: "admin"
+    dbPassword: "admin"
+    dbName: "bigbrother"
+    dbSslMode: "disable"
+    jwtSecret: "8Q4n5v1Qw8v9wF3n9z7k4p1b2c3d4e5f6g7h8i9j0k1l2m3n"
+    internalToken: "internal-token-pro"
+    mediamtxApiUrl: "http://big-brother-mediamtx:9997"
+    mediamtxRtspHost: "big-brother-mediamtx"
+
+# Telescreen Web Dashboard (React 19 + HLS.js)
+telescreen:
+  enabled: true
+  ingress:
+    enabled: true
+    className: "traefik"
+    hosts:
+      - host: cctv.local
+        paths:
+          - path: /
+            pathType: Prefix
+
+# Motion Detector Microservice (Local Snapshot Ingestion & Realtime Alerts)
+motion-detector:
+  enabled: true
+  config:
+    apiUrl: "http://big-brother-api:8080/api/alerts"
+    internalToken: "internal-token-pro"
+    cameraName: "cctv-cam-01"
+    cooldownSeconds: "15"
+    discordWebhook: ""
+    rtspUrl: "rtsp://big-brother-mediamtx:8554/stream"
+
+# Camera Agent (Physical USB /dev/video* or synthetic signal - disabled by default in cloud k8s)
+camera:
+  enabled: false
