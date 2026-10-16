@@ -1,66 +1,53 @@
-# Default values for mediamtx.
+# Default values for mediamtx (RTSP, RTMP, HLS, WebRTC Streaming Server).
 # This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 
-# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 replicaCount: 1
 revisionHistoryLimit: 2
 
-# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
   repository: bluenviron/mediamtx
-  # This sets the pull policy for images.
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
-# This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
-# This is to override the chart name.
 nameOverride: ""
 fullnameOverride: ""
 
-#This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Automatically mount a ServiceAccount's API credentials?
   automount: true
-  # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-# This is for setting Kubernetes Annotations to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
-# This is for setting Kubernetes Labels to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 podLabels: {}
-
 podSecurityContext: {}
-  # fsGroup: 2000
+securityContext: {}
 
-securityContext:
-  runAsUser: 0
-  privileged: true
-
-# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
   type: ClusterIP
   ports:
     - name: rtsp
       port: 8554
       targetPort: 8554
+      protocol: TCP
     - name: hls
       port: 8888
       targetPort: 8888
+      protocol: TCP
     - name: webrtc
       port: 8889
       targetPort: 8889
+      protocol: TCP
+    - name: api
+      port: 9997
+      targetPort: 9997
+      protocol: TCP
+    - name: rtmp
+      port: 1935
+      targetPort: 1935
+      protocol: TCP
 
-# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   enabled: true
   className: "traefik"
@@ -77,35 +64,52 @@ ingress:
         - mediamtx.local
       secretName: mediamtx-tls
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+livenessProbe:
+  tcpSocket:
+    port: rtsp
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 3
+  failureThreshold: 3
 
-#This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+readinessProbe:
+  tcpSocket:
+    port: rtsp
+  initialDelaySeconds: 2
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 2
+
+# MediaMTX Environment Configuration
+env:
+  MTX_API: "yes"
+  MTX_API_ADDRESS: ":9997"
+  MTX_RTSP_ADDRESS: ":8554"
+  MTX_HLS_ADDRESS: ":8888"
+  MTX_RTMP_ADDRESS: ":1935"
+  MTX_WEBRTC_ADDRESS: ":8889"
+  MTX_AUTHINTERNALUSERS_0_USER: "any"
+  MTX_AUTHINTERNALUSERS_0_PERMISSIONS_0_ACTION: "api"
+  MTX_AUTHINTERNALUSERS_0_PERMISSIONS_1_ACTION: "read"
+  MTX_AUTHINTERNALUSERS_0_PERMISSIONS_2_ACTION: "publish"
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 5
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
-# Additional volumes on the output Deployment definition.
 volumes: []
-
-# Additional volumeMounts on the output Deployment definition.
 volumeMounts: []
 
-nodeSelector:
-  kubernetes.io/hostname: rastberry
-
+nodeSelector: {}
 tolerations: []
-
 affinity: {}

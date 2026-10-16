@@ -1,6 +1,10 @@
+{{- if .Values.configMap.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "telescreen.fullname" . }}-config
+  labels:
+    {{- include "telescreen.labels" . | nindent 4 }}
 data:
-    STREAM_URL: "{{ .Values.configMap.data.STREAM_URL }}"
+  {{- toYaml .Values.configMap.data | nindent 2 }}
+{{- end }}
