@@ -102,8 +102,7 @@ env:
   MTX_HLS_ADDRESS: ":8888"
   MTX_WEBRTC: "yes"
   MTX_WEBRTC_ADDRESS: ":8889"
-  # Habilita auto-ingesta y auto-discovery en cualquier canal/path (ej: /iphone, /cam1, /obs)
-  MTX_PATHS_ALL_OTHERS: "{}"
+  # MediaMTX ya incluye 'all_others:' activo por defecto en su configuración base, permitiendo auto-ingesta (/canal, /iphone, /obs)
   MTX_AUTHINTERNALUSERS_0_USER: "any"
   MTX_AUTHINTERNALUSERS_0_PERMISSIONS_0_ACTION: "api"
   MTX_AUTHINTERNALUSERS_0_PERMISSIONS_1_ACTION: "read"
