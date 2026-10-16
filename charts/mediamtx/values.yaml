@@ -25,16 +25,28 @@ podSecurityContext: {}
 securityContext: {}
 
 service:
-  type: ClusterIP
+  # LoadBalancer expone directamente los puertos TCP (RTMP 1935, RTSP 8554, HLS 8888) en la IP del host/balanceador,
+  # permitiendo la emisión directa desde móviles (OctoStream, Larix), drones y software externo (OBS).
+  # Usa "NodePort" o "ClusterIP" según la infraestructura de tu cluster.
+  type: LoadBalancer
+  annotations: {}
+  loadBalancerIP: ""
   ports:
     - name: rtsp
       port: 8554
       targetPort: 8554
       protocol: TCP
+      # nodePort: 30554
+    - name: rtmp
+      port: 1935
+      targetPort: 1935
+      protocol: TCP
+      # nodePort: 31935
     - name: hls
       port: 8888
       targetPort: 8888
       protocol: TCP
+      # nodePort: 30888
     - name: webrtc
       port: 8889
       targetPort: 8889
@@ -43,12 +55,10 @@ service:
       port: 9997
       targetPort: 9997
       protocol: TCP
-    - name: rtmp
-      port: 1935
-      targetPort: 1935
-      protocol: TCP
 
 ingress:
+  # El Ingress maneja exclusivamente el tráfico HTTP/HTTPS para el reproductor web HLS (.m3u8 y fragmentos .ts).
+  # Para ingesta directa de vídeo vía RTMP o RTSP, conéctate a través del Service (LoadBalancer / NodePort).
   enabled: true
   className: "traefik"
   annotations:
@@ -84,10 +94,16 @@ readinessProbe:
 env:
   MTX_API: "yes"
   MTX_API_ADDRESS: ":9997"
+  MTX_RTSP: "yes"
   MTX_RTSP_ADDRESS: ":8554"
-  MTX_HLS_ADDRESS: ":8888"
+  MTX_RTMP: "yes"
   MTX_RTMP_ADDRESS: ":1935"
+  MTX_HLS: "yes"
+  MTX_HLS_ADDRESS: ":8888"
+  MTX_WEBRTC: "yes"
   MTX_WEBRTC_ADDRESS: ":8889"
+  # Habilita auto-ingesta y auto-discovery en cualquier canal/path (ej: /iphone, /cam1, /obs)
+  MTX_PATHS_ALL_OTHERS: "{}"
   MTX_AUTHINTERNALUSERS_0_USER: "any"
   MTX_AUTHINTERNALUSERS_0_PERMISSIONS_0_ACTION: "api"
   MTX_AUTHINTERNALUSERS_0_PERMISSIONS_1_ACTION: "read"

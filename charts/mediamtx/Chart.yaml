@@ -1,7 +1,16 @@
 apiVersion: v2
 name: mediamtx
-description: Big Brother CCTV media server.
+description: Big Brother CCTV MediaMTX streaming server (RTSP, RTMP, HLS, WebRTC).
 type: application
-version: 1.0.0
+version: 1.1.0
 appVersion: "latest"
 icon: https://telescreen.rdvl.net/favicon.ico
+home: https://github.com/bluenviron/mediamtx
+keywords:
+  - cctv
+  - streaming
+  - rtsp
+  - rtmp
+  - hls
+  - webrtc
+  - mediamtx
