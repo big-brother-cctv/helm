@@ -33,7 +33,7 @@ dependencies:
     repository: "file://../telescreen"
     condition: telescreen.enabled
   - name: motion-detector
-    version: "1.1.0"
+    version: "1.2.0"
     repository: "file://../motion-detector"
     condition: motion-detector.enabled
   - name: camera

@@ -10,6 +10,7 @@ data:
   CAMERA_NAME: {{ .Values.config.cameraName | default "camera" | quote }}
   COOLDOWN_SECONDS: {{ .Values.config.cooldownSeconds | default "15" | quote }}
   DISCORD_WEBHOOK: {{ .Values.config.discordWebhook | default "" | quote }}
+  NETCAM_URL: {{ .Values.config.rtspUrl | default "rtsp://mediamtx:8554/stream" | quote }}
   motion.conf: |
     daemon off
     stream_localhost off
@@ -23,7 +24,7 @@ data:
     picture_filename %Y-%m-%d_%H-%M-%S
     target_dir /tmp/motion_images
 
-    on_event_end /usr/local/bin/on_event_end.sh
+    on_picture_save /usr/local/bin/on_picture_save.sh %f
 
     camera_name {{ .Values.config.cameraName | default "camera" }}
     threshold {{ .Values.config.threshold | default 800 }}

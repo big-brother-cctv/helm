@@ -2,6 +2,6 @@ apiVersion: v2
 name: motion-detector
 description: Big Brother CCTV motion detector microservice.
 type: application
-version: 1.1.0
-appVersion: "latest"
+version: 1.2.0
+appVersion: "1.6.0"
 icon: https://telescreen.rdvl.net/favicon.ico
