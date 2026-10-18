@@ -39,6 +39,17 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "motion-detector.fullname" . }}-config
+          command:
+            - /bin/sh
+            - -c
+            - |
+              mkdir -p /tmp/motion_images
+              cp /etc/motion/motion.conf /tmp/motion.conf
+              if [ -f /etc/motion/on_picture_save.sh ]; then
+                cp /etc/motion/on_picture_save.sh /usr/local/bin/on_picture_save.sh
+                chmod +x /usr/local/bin/on_picture_save.sh
+              fi
+              exec motion -n -c /tmp/motion.conf
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
@@ -57,6 +68,9 @@ spec:
             - name: motion-conf
               mountPath: /etc/motion/motion.conf
               subPath: motion.conf
+            - name: motion-conf
+              mountPath: /etc/motion/on_picture_save.sh
+              subPath: on_picture_save.sh
             {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
