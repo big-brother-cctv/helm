@@ -99,9 +99,9 @@ config:
   width: 1280
   height: 720
   framerate: 30
-  threshold: 800
-  sensitivity: 30
-  noise: 5
+  threshold: 350
+  minMotionFrames: 2
+  noise: 32
 
 volumes: []
 volumeMounts: []

@@ -27,11 +27,12 @@ data:
     on_picture_save /usr/local/bin/on_picture_save.sh %f
 
     camera_name {{ .Values.config.cameraName | default "camera" }}
-    threshold {{ .Values.config.threshold | default 800 }}
-    sensitivity {{ .Values.config.sensitivity | default 30 }}
-    noise {{ .Values.config.noise | default 5 }}
+    threshold {{ .Values.config.threshold | default 350 }}
+    noise {{ .Values.config.noise | default 32 }}
+    noise_tune on
+    despeckle_filter EedDl
     notification_timeout 60
-    min_motion_frames 5
+    min_motion_frames {{ .Values.config.minMotionFrames | default 2 }}
     gap 10
     movie_output off
   on_picture_save.sh: |
