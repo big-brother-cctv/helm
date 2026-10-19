@@ -43,7 +43,7 @@ spec:
             - /bin/sh
             - -c
             - |
-              mkdir -p /tmp/motion_images /tmp/motion/conf.d
+              mkdir -p /tmp/motion_images /tmp/motion/conf.d /etc/motion/models
               if [ -f /etc/motion/on_picture_save.sh ]; then
                 cp /etc/motion/on_picture_save.sh /usr/local/bin/on_picture_save.sh
                 chmod +x /usr/local/bin/on_picture_save.sh
@@ -51,6 +51,19 @@ spec:
               if [ -f /etc/motion/entrypoint.sh ]; then
                 cp /etc/motion/entrypoint.sh /usr/local/bin/entrypoint.sh
                 chmod +x /usr/local/bin/entrypoint.sh
+              fi
+              if [ -f /etc/motion/detect_objects.py ]; then
+                cp /etc/motion/detect_objects.py /usr/local/bin/detect_objects.py
+                chmod +x /usr/local/bin/detect_objects.py
+              fi
+              if ! which python3 >/dev/null 2>&1; then
+                echo "[INIT] Instalando dependencias de IA..."
+                apt-get update && apt-get install -y --no-install-recommends python3 python3-numpy python3-pil python3-pip && \
+                pip install --no-cache-dir --break-system-packages onnxruntime || true
+              fi
+              if [ ! -f /etc/motion/models/yolov8n.onnx ] || [ $(wc -c < /etc/motion/models/yolov8n.onnx 2>/dev/null || echo 0) -lt 1000000 ]; then
+                echo "[INIT] Descargando modelo YOLOv8n ONNX..."
+                curl -sSL -o /etc/motion/models/yolov8n.onnx https://huggingface.co/unity/inference-engine-yolo/resolve/ed7f4daf9263d0d31be1d60b9d67c8baea721d60/yolov8n.onnx || true
               fi
               exec /usr/local/bin/entrypoint.sh
           ports:
@@ -74,6 +87,9 @@ spec:
             - name: motion-conf
               mountPath: /etc/motion/on_picture_save.sh
               subPath: on_picture_save.sh
+            - name: motion-conf
+              mountPath: /etc/motion/detect_objects.py
+              subPath: detect_objects.py
             {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
