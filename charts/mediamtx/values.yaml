@@ -100,6 +100,9 @@ env:
   MTX_RTMP_ADDRESS: ":1935"
   MTX_HLS: "yes"
   MTX_HLS_ADDRESS: ":8888"
+  MTX_HLSSEGMENTDURATION: "1s"
+  MTX_HLSPARTDURATION: "200ms"
+  MTX_HLSSEGMENTCOUNT: "3"
   MTX_WEBRTC: "yes"
   MTX_WEBRTC_ADDRESS: ":8889"
   # MediaMTX ya incluye 'all_others:' activo por defecto en su configuración base, permitiendo auto-ingesta (/canal, /iphone, /obs)
