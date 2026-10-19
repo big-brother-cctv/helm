@@ -105,6 +105,14 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
+# Persistence for PostgreSQL data
+persistence:
+  enabled: true
+  size: 10Gi
+  accessMode: ReadWriteOnce
+  mountPath: /var/lib/postgresql/data
+  # storageClass: ""
+
 # Additional volumes on the output Deployment definition.
 volumes: []
 

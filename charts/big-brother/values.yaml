@@ -8,6 +8,9 @@ global:
 # PostgreSQL Database
 postgres:
   enabled: true
+  persistence:
+    enabled: true
+    size: 10Gi
   configMap:
     enabled: true
     data:
