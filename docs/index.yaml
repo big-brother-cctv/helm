@@ -3,9 +3,9 @@ entries:
   api:
   - apiVersion: v2
     appVersion: latest
-    created: "2026-10-19T10:10:32.821788639Z"
+    created: "2026-10-19T10:43:10.111724328Z"
     description: Big Brother CCTV API.
-    digest: 14fab66a79036e9858f2e64582d7c516678e59f4567a525f9fd23f1936a473ed
+    digest: 8d51dcd1ea0943c75bae66ad895180cc849d201fe2172c83114e19ed98def1b9
     icon: https://telescreen.rdvl.net/favicon.ico
     name: api
     type: application
@@ -14,7 +14,7 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: latest
-    created: "2026-10-19T10:10:32.821351408Z"
+    created: "2026-10-19T10:43:10.111262396Z"
     description: Big Brother CCTV API.
     digest: 2a5650e272a8074dc94fb30a42873fe9b446b4df033a9187202a860e49734230
     icon: https://telescreen.rdvl.net/favicon.ico
@@ -26,7 +26,7 @@ entries:
   big-brother:
   - apiVersion: v2
     appVersion: latest
-    created: "2026-10-19T10:10:32.824232257Z"
+    created: "2026-10-19T10:43:10.114082731Z"
     dependencies:
     - condition: postgres.enabled
       name: postgres
@@ -54,7 +54,7 @@ entries:
       version: 1.0.0
     description: Complete Big Brother CCTV Surveillance Stack (Telescreen, API, MediaMTX,
       Postgres, Motion Detector).
-    digest: 16bc78e038be9fcd09cf5c809169f8c203cf1956dacae9d95cba4f98ef850157
+    digest: c91e89af0ae537549269b188f784f3d3f6dcbbed0e2ab50cd42fde9597c19cdc
     home: https://github.com/big-brother-cctv
     icon: https://telescreen.rdvl.net/favicon.ico
     keywords:
@@ -73,9 +73,9 @@ entries:
   camera:
   - apiVersion: v2
     appVersion: latest
-    created: "2026-10-19T10:10:32.824599808Z"
+    created: "2026-10-19T10:43:10.114479514Z"
     description: Big Brother CCTV camera microservice.
-    digest: 689d8500ced29b121ec1f73ef580a821ae3f7652c0e29b7398725d6ff295dab1
+    digest: c3d8646c42732557f65ae6eca823bc7275822c9065dd4131c45716e4cdcdf38e
     icon: https://telescreen.rdvl.net/favicon.ico
     name: camera
     type: application
@@ -85,9 +85,9 @@ entries:
   mediamtx:
   - apiVersion: v2
     appVersion: latest
-    created: "2026-10-19T10:10:32.826084804Z"
+    created: "2026-10-19T10:43:10.116680242Z"
     description: Big Brother CCTV MediaMTX streaming server (RTSP, RTMP, HLS, WebRTC).
-    digest: 21bae731a0a667f6273acc1eca2b4975a0405b21bbe9894f22ce9d69e2e001ad
+    digest: bff3b8b7c7cd807cdb083d860ac72ea431eff37dcb07b7b248e287d639a313ad
     home: https://github.com/bluenviron/mediamtx
     icon: https://telescreen.rdvl.net/favicon.ico
     keywords:
@@ -105,7 +105,7 @@ entries:
     version: 1.1.1
   - apiVersion: v2
     appVersion: latest
-    created: "2026-10-19T10:10:32.825582839Z"
+    created: "2026-10-19T10:43:10.115575088Z"
     description: Big Brother CCTV MediaMTX streaming server (RTSP, RTMP, HLS, WebRTC).
     digest: c2c2076c81a714fd801d50cdae6e24fbdec4739c9708e2c036cdad837ef08f9f
     home: https://github.com/bluenviron/mediamtx
@@ -125,7 +125,7 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: latest
-    created: "2026-10-19T10:10:32.82509704Z"
+    created: "2026-10-19T10:43:10.114900564Z"
     description: Big Brother CCTV media server.
     digest: 28634d6a2287e53aaa75bc5f933cc69223073000238251fd975c1e268421cc17
     icon: https://telescreen.rdvl.net/favicon.ico
@@ -137,9 +137,9 @@ entries:
   motion-detector:
   - apiVersion: v2
     appVersion: 1.6.0
-    created: "2026-10-19T10:10:32.828044672Z"
+    created: "2026-10-19T10:43:10.11795557Z"
     description: Big Brother CCTV motion detector microservice.
-    digest: fc8794cd2b9e01543ff3e26f1cf75f6c209639f3b6a01e0cd8c7b608959bc504
+    digest: 48fd9f5445dd78a11b238696431b6fed2259c6a93bbc5fc185d80d1a08f9bed7
     icon: https://telescreen.rdvl.net/favicon.ico
     name: motion-detector
     type: application
@@ -148,7 +148,7 @@ entries:
     version: 1.2.0
   - apiVersion: v2
     appVersion: latest
-    created: "2026-10-19T10:10:32.827553152Z"
+    created: "2026-10-19T10:43:10.117528932Z"
     description: Big Brother CCTV motion detector microservice.
     digest: 707955033821b3d6c203d8c32a72f61d06dba62cfcd465c342724e393d438e49
     icon: https://telescreen.rdvl.net/favicon.ico
@@ -159,7 +159,7 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: latest
-    created: "2026-10-19T10:10:32.826436368Z"
+    created: "2026-10-19T10:43:10.117117096Z"
     description: Big Brother CCTV motion detector microservice.
     digest: 08709022cffc32bb587c5dab200b5085af543d2944bee71c83448b22f80e68d8
     icon: https://telescreen.rdvl.net/favicon.ico
@@ -171,9 +171,9 @@ entries:
   postgres:
   - apiVersion: v2
     appVersion: latest
-    created: "2026-10-19T10:10:32.828498407Z"
+    created: "2026-10-19T10:43:10.118406665Z"
     description: Big Brother CCTV PostgreSQL database.
-    digest: b7924fe323f7f88ef15d1668d2e79f82d435b3e3ffdd67534588b7870a4c1014
+    digest: cf59199584b9c46ba477f61289508206b792e910bb049b1cf9c7f76b3d4aae74
     icon: https://telescreen.rdvl.net/favicon.ico
     name: postgres
     type: application
@@ -183,13 +183,13 @@ entries:
   telescreen:
   - apiVersion: v2
     appVersion: latest
-    created: "2026-10-19T10:10:32.828853169Z"
+    created: "2026-10-19T10:43:10.118773102Z"
     description: Big Brother CCTV frontend.
-    digest: 3905e6d43761545a78f94507d0ad7b92a69cbca2b76402a12b5820af4b77ba15
+    digest: 7b88e910a8923fc6d108e53012ecfa014ccbce8b4c845a0533b0c3854ebd4265
     icon: https://telescreen.rdvl.net/favicon.ico
     name: telescreen
     type: application
     urls:
     - https://big-brother-cctv.github.io/helm/telescreen-1.0.0.tgz
     version: 1.0.0
-generated: "2026-10-19T10:10:32.820717054Z"
+generated: "2026-10-19T10:43:10.110653361Z"
