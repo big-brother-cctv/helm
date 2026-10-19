@@ -43,13 +43,16 @@ spec:
             - /bin/sh
             - -c
             - |
-              mkdir -p /tmp/motion_images
-              cp /etc/motion/motion.conf /tmp/motion.conf
+              mkdir -p /tmp/motion_images /tmp/motion/conf.d
               if [ -f /etc/motion/on_picture_save.sh ]; then
                 cp /etc/motion/on_picture_save.sh /usr/local/bin/on_picture_save.sh
                 chmod +x /usr/local/bin/on_picture_save.sh
               fi
-              exec motion -n -c /tmp/motion.conf
+              if [ -f /etc/motion/entrypoint.sh ]; then
+                cp /etc/motion/entrypoint.sh /usr/local/bin/entrypoint.sh
+                chmod +x /usr/local/bin/entrypoint.sh
+              fi
+              exec /usr/local/bin/entrypoint.sh
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
@@ -66,8 +69,8 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: motion-conf
-              mountPath: /etc/motion/motion.conf
-              subPath: motion.conf
+              mountPath: /etc/motion/entrypoint.sh
+              subPath: entrypoint.sh
             - name: motion-conf
               mountPath: /etc/motion/on_picture_save.sh
               subPath: on_picture_save.sh
