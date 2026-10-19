@@ -52,7 +52,7 @@ telescreen:
     enabled: true
     className: "traefik"
     hosts:
-      - host: cctv.local
+      - host: telescreen.local
         paths:
           - path: /
             pathType: Prefix
