@@ -6,3 +6,4 @@ data:
   POSTGRES_USER: "{{ .Values.configMap.data.POSTGRES_USER }}"
   POSTGRES_PASSWORD: "{{ .Values.configMap.data.POSTGRES_PASSWORD }}"
   POSTGRES_DB: "{{ .Values.configMap.data.POSTGRES_DB }}"
+  PGDATA: "{{ .Values.configMap.data.PGDATA | default "/var/lib/postgresql/data/pgdata" }}"
