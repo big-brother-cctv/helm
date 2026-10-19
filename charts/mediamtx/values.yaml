@@ -116,7 +116,10 @@ env:
   MTX_WEBRTC_ADDRESS: ":8889"
   MTX_WEBRTCLOCALUDPADDRESS: ":8189"
   MTX_WEBRTCLOCALTCPADDRESS: ":8189"
-  MTX_WEBRTCADDITIONALHOSTS: "192.168.1.231,telescreen.local"
+  MTX_WEBRTCADDITIONALHOSTS: "192.168.1.231,telescreen.local,telescreen.rdvl.net"
+  MTX_WEBRTCICESERVERS2_0_URL: "stun:stun.l.google.com:19302"
+  MTX_WEBRTCICESERVERS2_1_URL: "stun:stun1.l.google.com:19302"
+  MTX_WEBRTCICESERVERS2_2_URL: "stun:stun.cloudflare.com:3478"
   # MediaMTX ya incluye 'all_others:' activo por defecto en su configuración base, permitiendo auto-ingesta (/canal, /iphone, /obs)
   MTX_AUTHINTERNALUSERS_0_USER: "any"
   MTX_AUTHINTERNALUSERS_0_PERMISSIONS_0_ACTION: "api"
