@@ -18,7 +18,7 @@ spec:
     - name: {{ .name }}
       port: {{ .port }}
       targetPort: {{ .targetPort }}
-      protocol: TCP
+      protocol: {{ .protocol | default "TCP" }}
       {{- if and (or (eq $.Values.service.type "NodePort") (eq $.Values.service.type "LoadBalancer")) .nodePort }}
       nodePort: {{ .nodePort }}
       {{- end }}

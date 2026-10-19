@@ -51,6 +51,14 @@ service:
       port: 8889
       targetPort: 8889
       protocol: TCP
+    - name: webrtc-udp
+      port: 8189
+      targetPort: 8189
+      protocol: UDP
+    - name: webrtc-tcp
+      port: 8189
+      targetPort: 8189
+      protocol: TCP
     - name: api
       port: 9997
       targetPort: 9997
@@ -105,6 +113,9 @@ env:
   MTX_HLSSEGMENTCOUNT: "7"
   MTX_WEBRTC: "yes"
   MTX_WEBRTC_ADDRESS: ":8889"
+  MTX_WEBRTCLOCALUDPADDRESS: ":8189"
+  MTX_WEBRTCLOCALTCPADDRESS: ":8189"
+  MTX_WEBRTCADDITIONALHOSTS: "192.168.1.231,telescreen.local"
   # MediaMTX ya incluye 'all_others:' activo por defecto en su configuración base, permitiendo auto-ingesta (/canal, /iphone, /obs)
   MTX_AUTHINTERNALUSERS_0_USER: "any"
   MTX_AUTHINTERNALUSERS_0_PERMISSIONS_0_ACTION: "api"
