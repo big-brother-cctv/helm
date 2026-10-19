@@ -1,88 +1,120 @@
-# Big Brother Helm Charts
+# Big Brother CCTV — Helm Charts (Kubernetes)
 
-This repository contains Helm charts for deploying the Big Brother CCTV system and its microservices on Kubernetes.
-
-## Charts
-
-- **big-brother** *(Recommended)*: Complete umbrella chart orchestrating all microservices together with a single command.
-- **api**: Backend API for the CCTV system, alerts ingestion, real-time SSE dispatch, and snapshot storage with PVC support.
-- **telescreen**: Frontend web dashboard (React 19 + HLS.js) with real-time motion alerts drawer and acoustic radar chime.
-- **mediamtx**: High-performance streaming server handling video streams (RTSP, RTMP, HLS, WebRTC).
-- **motion-detector**: 100% in-house motion detector microservice uploading snapshots directly to the local API.
-- **postgres**: PostgreSQL database for persistent storage (users, cameras, alerts).
-- **camera**: Edge microservice for local webcam/device capture and streaming.
+Colección de charts oficiales de **Helm** para el despliegue distribuido de la plataforma **Big Brother CCTV** en clusters de **Kubernetes** (k3s, MicroK8s, EKS, GKE, Bare Metal).
 
 ---
 
-## Quick Start (Deploy the Entire System)
+## 📦 Mapa de Charts
 
-Deploy everything with a single Helm command using the **umbrella chart**:
+| Chart | Directorio | Descripción |
+|---|---|---|
+| **big-brother** *(Recomendado)* | [`charts/big-brother`](file:///home/rdvl/repositories/big-brother-cctv/helm/charts/big-brother) | **Umbrella Chart**: Despliega y orquesta la suite completa con un solo comando. |
+| **api** | [`charts/api`](file:///home/rdvl/repositories/big-brother-cctv/helm/charts/api) | Backend en Go (REST API, SSE en tiempo real, gestión de snapshots y base de datos). |
+| **telescreen** | [`charts/telescreen`](file:///home/rdvl/repositories/big-brother-cctv/helm/charts/telescreen) | Dashboard táctico web (React 19, HLS.js, visor forense, sonido de alarma). |
+| **mediamtx** | [`charts/mediamtx`](file:///home/rdvl/repositories/big-brother-cctv/helm/charts/mediamtx) | Servidor de streaming de alto rendimiento (RTSP, RTMP, HLS, WebRTC). |
+| **motion-detector** | [`charts/motion-detector`](file:///home/rdvl/repositories/big-brother-cctv/helm/charts/motion-detector) | Daemon unificado multi-cámara con captura forense y purga inmediata de disco. |
+| **postgres** | [`charts/postgres`](file:///home/rdvl/repositories/big-brother-cctv/helm/charts/postgres) | Base de datos PostgreSQL con soporte para volumen persistente (PVC). |
+| **camera** | [`charts/camera`](file:///home/rdvl/repositories/big-brother-cctv/helm/charts/camera) | Agente edge para dispositivos USB físicos (desactivado por defecto en la nube). |
 
-```sh
-# Clone or navigate to the helm folder
+---
+
+## 🚀 Despliegue Rápido (Stack Completo)
+
+Para desplegar todo el sistema en un namespace dedicado:
+
+```bash
+# 1. Crear namespace
+kubectl create namespace big-brother-cctv
+
+# 2. Desplegar mediante el Umbrella Chart
+helm upgrade --install big-brother ./charts/big-brother -n big-brother-cctv
+```
+
+### Personalización mediante valores
+Puedes anular parámetros directamente en la línea de comandos o creando tu propio archivo `my-values.yaml`:
+
+```bash
+helm upgrade --install big-brother ./charts/big-brother \
+  --namespace big-brother-cctv \
+  --set postgres.persistence.size=20Gi \
+  --set api.config.jwtSecret="tu-secreto-super-seguro" \
+  --set telescreen.ingress.hosts[0].host="cctv.midominio.com"
+```
+
+---
+
+## 🔧 Parámetros Clave de Configuración
+
+### 1. API Core (`charts/api`)
+```yaml
+api:
+  config:
+    port: "8080"
+    dbHost: "postgres"
+    dbPort: "5432"
+    dbUser: "admin"
+    dbPassword: "admin"
+    dbName: "bigbrother"
+    internalToken: "internal-token-pro"
+    mediamtxApiUrl: "http://mediamtx:9997"
+    mediamtxRtspHost: "mediamtx"
+  persistence:
+    enabled: true
+    size: 10Gi
+    mountPath: /app/data
+```
+
+### 2. Motion Detector Unificado (`charts/motion-detector`)
+```yaml
+motion-detector:
+  config:
+    apiUrl: "http://api:8080/api/alerts"
+    internalToken: "internal-token-pro"
+    cooldownSeconds: "15"
+    discordWebhook: "" # Opcional: webhook para alertas en Discord
+```
+
+### 3. Base de Datos PostgreSQL (`charts/postgres`)
+```yaml
+postgres:
+  image:
+    tag: "16-alpine"
+  persistence:
+    enabled: true
+    size: 10Gi
+  configMap:
+    data:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "bigbrother"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+```
+
+---
+
+## 🌐 Ingress y Exposición Externa
+
+El sistema admite controladores Ingress como **Traefik** (estándar en k3s) o **Cloudflare Tunnels**:
+
+```yaml
+telescreen:
+  ingress:
+    enabled: true
+    className: "traefik"
+    hosts:
+      - host: cctv.local
+        paths:
+          - path: /
+            pathType: Prefix
+```
+
+---
+
+## 🛠️ Mantenimiento y Empaquetado del Repositorio Helm
+
+Para generar los paquetes `.tgz` e indexar el catálogo público en `docs/index.yaml`:
+
+```bash
 cd helm
-
-# Deploy all services into Kubernetes
-helm install big-brother ./charts/big-brother
-```
-
-To customize or enable/disable specific microservices:
-```sh
-helm install big-brother ./charts/big-brother \
-  --set api.persistence.enabled=true \
-  --set api.persistence.size=10Gi \
-  --set motion-detector.config.cameraName="salon-cctv"
-```
-
----
-
-## Usage via Helm Repository
-
-1. **Add the Helm repository:**
-   ```sh
-   helm repo add big-brother-cctv https://big-brother-cctv.github.io/helm
-   helm repo update
-   ```
-
-2. **Install the full stack:**
-   ```sh
-   helm install big-brother big-brother-cctv/big-brother
-   ```
-
-3. **Or install individual charts:**
-   ```sh
-   helm install my-api big-brother-cctv/api
-   helm install my-telescreen big-brother-cctv/telescreen
-   helm install my-motion-detector big-brother-cctv/motion-detector
-   ```
-
----
-
-## Configuration & Key Parameters
-
-### API Chart (`charts/api`)
-| Parameter | Default | Description |
-|---|---|---|
-| `persistence.enabled` | `false` | Enable PVC persistent volume for motion alert snapshots (`/app/data`) |
-| `persistence.size` | `5Gi` | Storage size for snapshots |
-| `config.internalToken` | `"internal-token-pro"` | Shared secret for edge motion detectors |
-| `config.jwtSecret` | `...` | Secret key for JWT authentication |
-
-### Motion Detector Chart (`charts/motion-detector`)
-| Parameter | Default | Description |
-|---|---|---|
-| `config.apiUrl` | `"http://api:8080/api/alerts"` | In-house API target endpoint for snapshots |
-| `config.internalToken` | `"internal-token-pro"` | Token matching the API `INTERNAL_TOKEN` |
-| `config.cameraName` | `"camera"` | Name of the camera associated with motion events |
-| `config.cooldownSeconds` | `"15"` | Smart cooldown seconds between alert notifications |
-| `config.rtspUrl` | `"rtsp://mediamtx:8554/stream"` | RTSP stream source to analyze |
-
----
-
-## Development & Repository Maintenance
-
-To package all charts and update the `docs/index.yaml` repository index:
-
-```sh
 bash ./build-helm-repo.sh
 ```
