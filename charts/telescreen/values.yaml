@@ -44,15 +44,24 @@ ingress:
 
 ingressLocal:
   enabled: true
-  name: "telescreen.local"
+  name: "telescreen-local"
   className: "traefik"
-  annotations: {}
+  annotations:
+    cert-manager.io/cluster-issuer: "le-cluster-issuer"
+    traefik.ingress.kubernetes.io/router.entrypoints: "web,websecure"
   hosts:
+    - host: telescreen.rdvl.net
+      paths:
+        - path: /
+          pathType: Prefix
     - host: telescreen.local
       paths:
         - path: /
           pathType: Prefix
-  tls: []
+  tls:
+    - secretName: telescreen-local-tls
+      hosts:
+        - telescreen.rdvl.net
 
 livenessProbe:
   httpGet:

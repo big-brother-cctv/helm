@@ -2,6 +2,6 @@ apiVersion: v2
 name: telescreen
 description: Big Brother CCTV frontend.
 type: application
-version: 1.1.0
+version: 1.1.1
 appVersion: "latest"
 icon: https://telescreen.rdvl.net/favicon.ico
