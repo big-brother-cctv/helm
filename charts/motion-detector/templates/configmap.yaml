@@ -158,5 +158,8 @@ data:
       echo "Alerta de [${CAMERA_NAME}] omitida (cooldown: ${diff}s transcurridos, requiere ${COOLDOWN_SECONDS}s)"
     fi
 
-    # Limpieza periódica de fotos antiguas en /tmp/motion_images (>10 minutos)
-    find /tmp/motion_images -name "*.jpg" -mmin +10 -delete 2>/dev/null || true
+    # Limpiar de inmediato el fichero temporal procesado para no acumular basura en disco
+    rm -f "$FILE"
+
+    # Limpieza de seguridad de posibles ficheros residuales antiguos (>2 minutos)
+    find /tmp/motion_images -type f -name "*.jpg" -mmin +2 -delete 2>/dev/null || true
