@@ -17,3 +17,5 @@ data:
   CONTENT_MANAGER_URL: {{ .Values.config.contentManagerUrl | default "http://content-manager:8181" | quote }}
   MEDIAMTX_API_URL: {{ .Values.config.mediamtxApiUrl | default "http://mediamtx:9997" | quote }}
   MEDIAMTX_RTSP_HOST: {{ .Values.config.mediamtxRtspHost | default "mediamtx" | quote }}
+  DATA_DIR: {{ .Values.persistence.mountPath | default "/app/data" | quote }}
+  ALERTS_DIR: {{ printf "%s/alerts" (.Values.persistence.mountPath | default "/app/data") | quote }}

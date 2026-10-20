@@ -5,6 +5,10 @@ metadata:
   labels:
     {{- include "api.labels" . | nindent 4 }}
 spec:
+  {{- if and .Values.persistence.enabled (eq (int .Values.replicaCount) 1) }}
+  strategy:
+    type: Recreate
+  {{- end }}
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}

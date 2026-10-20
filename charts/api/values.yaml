@@ -88,10 +88,10 @@ autoscaling:
 
 # Persistent storage for alert snapshots and uploaded data
 persistence:
-  enabled: false
+  enabled: true
   storageClass: ""
   accessMode: ReadWriteOnce
-  size: 5Gi
+  size: 10Gi
   mountPath: /app/data
 
 volumes: []
