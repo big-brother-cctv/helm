@@ -60,3 +60,10 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Nombre del Secret con JWT_SECRET, INTERNAL_TOKEN, DB_PASSWORD y ADMIN_INITIAL_PASSWORD.
+*/}}
+{{- define "api.secretName" -}}
+{{- .Values.secrets.existingSecret | default (printf "%s-secrets" (include "api.fullname" .)) }}
+{{- end }}

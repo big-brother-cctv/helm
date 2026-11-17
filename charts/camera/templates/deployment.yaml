@@ -39,6 +39,13 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "camera.fullname" . }}-config
+          env:
+            # INTERNAL_TOKEN compartido con la API (Secret creado por el chart "api")
+            - name: INTERNAL_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "internalTokenSecret.name es obligatorio (Secret de la API, p. ej. api-secrets)" .Values.internalTokenSecret.name }}
+                  key: {{ .Values.internalTokenSecret.key | default "INTERNAL_TOKEN" }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

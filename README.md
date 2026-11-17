@@ -53,11 +53,18 @@ api:
     dbHost: "postgres"
     dbPort: "5432"
     dbUser: "admin"
-    dbPassword: "admin"
     dbName: "bigbrother"
-    internalToken: "internal-token-pro"
     mediamtxApiUrl: "http://mediamtx:9997"
     mediamtxRtspHost: "mediamtx"
+    allowRegistration: false   # auto-registro público desactivado
+  # Secretos en un Secret "<fullname>-secrets" (nunca en el ConfigMap).
+  # Vacíos = se conservan del Secret existente o se generan aleatoriamente.
+  secrets:
+    existingSecret: ""         # o el nombre de un Secret propio (JWT_SECRET, INTERNAL_TOKEN, DB_PASSWORD)
+    jwtSecret: ""
+    internalToken: ""
+    dbPassword: ""             # vacío = "admin"; debe coincidir con POSTGRES_PASSWORD
+    adminInitialPassword: ""   # vacío = se genera y se imprime en el log de la API
   persistence:
     enabled: true
     size: 10Gi
@@ -69,7 +76,9 @@ api:
 motion-detector:
   config:
     apiUrl: "http://api:8080/api/alerts"
-    internalToken: "internal-token-pro"
+    internalTokenSecret:       # Secret de la API con INTERNAL_TOKEN
+      name: "api-secrets"
+      key: "INTERNAL_TOKEN"
     cooldownSeconds: "15"
     discordWebhook: "" # Opcional: webhook para alertas en Discord
 ```

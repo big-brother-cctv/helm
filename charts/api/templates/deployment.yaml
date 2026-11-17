@@ -17,10 +17,12 @@ spec:
       {{- include "api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        # Reinicia el pod si cambian config o secretos gestionados por el chart
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "api.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
@@ -43,6 +45,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "api.fullname" . }}-config
+            - secretRef:
+                name: {{ include "api.secretName" . }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

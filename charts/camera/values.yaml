@@ -70,13 +70,17 @@ configMap:
     CAMERA_NAME: "Salon"
     API_URL: "http://api:8080/api"
     MEDIAMTX_URL: "rtsp://mediamtx:8554"
-    INTERNAL_TOKEN: "internal-token-pro"
     CONFIG_POLL_INTERVAL: "10"
     CONNECTION_MODE: "push"
     SOURCE_TYPE: "v4l2"
     DEVICE: "/dev/video0"
     RESOLUTION: "1280x720"
     FPS: "25"
+
+# Secret con el INTERNAL_TOKEN de la API (release "api" -> Secret "api-secrets")
+internalTokenSecret:
+  name: "api-secrets"
+  key: "INTERNAL_TOKEN"
 
 # Additional volumes/mounts
 volumes: []
