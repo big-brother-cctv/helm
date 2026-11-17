@@ -98,6 +98,11 @@ autoscaling:
 volumes: []
 volumeMounts: []
 
+# Credencial de lectura de MediaMTX (Secret creado por el chart "api")
+mediamtxReadAuthSecret:
+  name: "api-secrets"
+  key: "MEDIA_READ_BASIC"
+
 configMap:
   enabled: false
   data: {}

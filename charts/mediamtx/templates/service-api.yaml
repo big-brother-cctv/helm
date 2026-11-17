@@ -1,0 +1,23 @@
+{{- /*
+Service interno (ClusterIP) para la API de control de MediaMTX (:9997).
+No se publica en el LoadBalancer: solo la API de Big Brother la usa dentro del clúster.
+*/ -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mediamtx.fullname" . }}-api
+  labels:
+    {{- include "mediamtx.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    {{- range .Values.service.ports }}
+    {{- if eq (toString .public) "false" }}
+    - name: {{ .name }}
+      port: {{ .port }}
+      targetPort: {{ .targetPort }}
+      protocol: {{ .protocol | default "TCP" }}
+    {{- end }}
+    {{- end }}
+  selector:
+    {{- include "mediamtx.selectorLabels" . | nindent 4 }}

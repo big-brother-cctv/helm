@@ -41,6 +41,15 @@ spec:
             - configMapRef:
                 name: {{ include "telescreen.fullname" . }}-config
           {{- end }}
+          {{- if .Values.mediamtxReadAuthSecret.name }}
+          env:
+            # base64("reader:<MEDIA_READ_TOKEN>"): nginx lo envía a MediaMTX en /stream/ y /whep/
+            - name: MEDIAMTX_READ_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mediamtxReadAuthSecret.name }}
+                  key: {{ .Values.mediamtxReadAuthSecret.key | default "MEDIA_READ_BASIC" }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

@@ -42,13 +42,30 @@ spec:
               containerPort: {{ .port }}
               protocol: {{ .protocol | default "TCP" }}
             {{- end }}
-          {{- with .Values.env }}
           env:
-            {{- range $key, $value := . }}
+            {{- range $key, $value := .Values.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-          {{- end }}
+            {{- if eq .Values.auth.mode "http" }}
+            # Cada acción (publish/read/api...) se valida contra la API de Big Brother
+            - name: MTX_AUTHMETHOD
+              value: "http"
+            - name: MTX_AUTHHTTPADDRESS
+              value: {{ required "auth.httpAddress es obligatorio con auth.mode=http" .Values.auth.httpAddress | quote }}
+            {{- else if eq .Values.auth.mode "open" }}
+            # INSEGURO: cualquiera puede publicar, leer y usar la API de control
+            - name: MTX_AUTHINTERNALUSERS_0_USER
+              value: "any"
+            - name: MTX_AUTHINTERNALUSERS_0_PERMISSIONS_0_ACTION
+              value: "api"
+            - name: MTX_AUTHINTERNALUSERS_0_PERMISSIONS_1_ACTION
+              value: "read"
+            - name: MTX_AUTHINTERNALUSERS_0_PERMISSIONS_2_ACTION
+              value: "publish"
+            {{- else }}
+            {{- fail "auth.mode debe ser http u open" }}
+            {{- end }}
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:

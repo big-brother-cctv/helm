@@ -69,7 +69,8 @@ config:
   # Auto-registro público (POST /api/auth/register). Si se activa, solo crea usuarios "viewer".
   allowRegistration: false
   contentManagerUrl: "http://content-manager:8181"
-  mediamtxApiUrl: "http://mediamtx:9997"
+  # Service ClusterIP interno del chart mediamtx (la API de control ya no se publica en el LoadBalancer)
+  mediamtxApiUrl: "http://mediamtx-api:9997"
   mediamtxRtspHost: "mediamtx"
 
 # Secretos de la API (se guardan en un Secret, nunca en el ConfigMap).
@@ -82,6 +83,11 @@ secrets:
   existingSecret: ""
   jwtSecret: ""
   internalToken: ""
+  # Credenciales de MediaMTX (authMethod: http contra /internal/mediamtx/auth):
+  # - mediaPublishToken: clave para publicar desde móviles/OBS (usuario "publisher")
+  # - mediaReadToken: clave de lectura para motion-detector y el nginx de Telescreen (usuario "reader")
+  mediaPublishToken: ""
+  mediaReadToken: ""
   # Debe coincidir con POSTGRES_PASSWORD del chart postgres (vacío = "admin", el valor histórico)
   dbPassword: ""
   # Password del usuario "admin" al crear una BD vacía. Vacío = se genera y se imprime en el log.

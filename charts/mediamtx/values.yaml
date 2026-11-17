@@ -59,10 +59,12 @@ service:
       port: 8189
       targetPort: 8189
       protocol: TCP
+    # API de control: NO se publica en el LoadBalancer; va en el Service interno "<fullname>-api"
     - name: api
       port: 9997
       targetPort: 9997
       protocol: TCP
+      public: false
 
 ingress:
   # El Ingress maneja exclusivamente el tráfico HTTP/HTTPS para el reproductor web HLS (.m3u8 y fragmentos .ts).
@@ -122,10 +124,16 @@ env:
   MTX_WEBRTCICESERVERS2_1_URL: "stun:stun1.l.google.com:19302"
   MTX_WEBRTCICESERVERS2_2_URL: "stun:stun.cloudflare.com:3478"
   # MediaMTX ya incluye 'all_others:' activo por defecto en su configuración base, permitiendo auto-ingesta (/canal, /iphone, /obs)
-  MTX_AUTHINTERNALUSERS_0_USER: "any"
-  MTX_AUTHINTERNALUSERS_0_PERMISSIONS_0_ACTION: "api"
-  MTX_AUTHINTERNALUSERS_0_PERMISSIONS_1_ACTION: "read"
-  MTX_AUTHINTERNALUSERS_0_PERMISSIONS_2_ACTION: "publish"
+
+# Autenticación de MediaMTX
+# - http: cada acción se valida contra la API de Big Brother (recomendado).
+#   Publicar: rtsp://publisher:<MEDIA_PUBLISH_TOKEN>@host:8554/<cámara>
+#             rtmp://host:1935/<cámara>?user=publisher&pass=<MEDIA_PUBLISH_TOKEN>
+#   (la clave está en el Secret api-secrets y en el dashboard al añadir una cámara)
+# - open: sin autenticación (solo para desarrollo o migración).
+auth:
+  mode: http
+  httpAddress: "http://api:8080/internal/mediamtx/auth"
 
 resources:
   limits:

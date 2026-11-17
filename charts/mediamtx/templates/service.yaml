@@ -15,6 +15,7 @@ spec:
   {{- end }}
   ports:
     {{- range .Values.service.ports }}
+    {{- if ne (toString .public) "false" }}
     - name: {{ .name }}
       port: {{ .port }}
       targetPort: {{ .targetPort }}
@@ -22,6 +23,7 @@ spec:
       {{- if and (or (eq $.Values.service.type "NodePort") (eq $.Values.service.type "LoadBalancer")) .nodePort }}
       nodePort: {{ .nodePort }}
       {{- end }}
+    {{- end }}
     {{- end }}
   selector:
     {{- include "mediamtx.selectorLabels" . | nindent 4 }}
