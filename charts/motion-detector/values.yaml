@@ -10,7 +10,7 @@ revisionHistoryLimit: 2
 image:
   repository: ghcr.io/big-brother-cctv/motion-detector
   # This sets the pull policy for images.
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
@@ -91,9 +91,16 @@ autoscaling:
 # Motion Detection Configuration
 config:
   apiUrl: "http://api:8080/api/alerts"
-  internalToken: "internal-token-pro"
+  # INTERNAL_TOKEN compartido con la API. Por defecto se lee del Secret que crea el chart "api"
+  # (release "api" -> Secret "api-secrets"). Ajusta el nombre si tu release de la API es otro.
+  internalTokenSecret:
+    name: "api-secrets"
+    key: "INTERNAL_TOKEN"
+  # Compatibilidad: si se define, se crea un Secret propio con este valor (debe coincidir con la API).
+  internalToken: ""
   cameraName: "camera"
   cooldownSeconds: "15"
+  # URL del webhook de Discord (se guarda en un Secret)
   discordWebhook: ""
   rtspUrl: "rtsp://mediamtx:8554/stream"
   width: 1280
