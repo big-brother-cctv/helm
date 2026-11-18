@@ -101,6 +101,14 @@ secrets:
   # Password del usuario "admin" al crear una BD vacía. Vacío = se genera y se imprime en el log.
   adminInitialPassword: ""
 
+# Rollouts sin cortes: al terminar, el pod sigue sirviendo unos segundos mientras Traefik y
+# Cloudflare dejan de enviarle tráfico (si no, el reinicio da ~2 s de 502).
+lifecycle:
+  preStop:
+    exec:
+      command: ["sleep", "8"]
+terminationGracePeriodSeconds: 30
+
 resources:
   limits:
     cpu: 250m
