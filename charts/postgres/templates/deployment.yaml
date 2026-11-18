@@ -5,9 +5,11 @@ metadata:
   labels:
     {{- include "postgres.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  # Recreate: nunca dos Postgres a la vez sobre el mismo volumen (con local-path ambos pods
+  # podrían montarlo en el mismo nodo y corromper PGDATA durante un upgrade)
+  strategy:
+    type: Recreate
+  replicas: 1
   selector:
     matchLabels:
       {{- include "postgres.selectorLabels" . | nindent 6 }}

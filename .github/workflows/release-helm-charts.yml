@@ -24,6 +24,10 @@ jobs:
         run: |
           mkdir -p docs
           for chart in charts/*/; do
+            # Umbrella: empaquetar con los subcharts locales actuales (no versionados en git)
+            if grep -q '^dependencies:' "$chart/Chart.yaml"; then
+              helm dependency update "$chart"
+            fi
             helm package "$chart" -d docs
           done
 
