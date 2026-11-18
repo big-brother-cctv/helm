@@ -81,6 +81,14 @@ readinessProbe:
   timeoutSeconds: 2
   failureThreshold: 2
 
+# Rollouts sin cortes: al terminar, el pod sigue sirviendo unos segundos mientras Traefik y
+# Cloudflare dejan de enviarle tráfico (si no, el reinicio da ~2 s de 502).
+lifecycle:
+  preStop:
+    exec:
+      command: ["sleep", "8"]
+terminationGracePeriodSeconds: 30
+
 resources:
   limits:
     cpu: 200m
