@@ -17,6 +17,10 @@ data:
   {{- with .Values.config.vapidSubject }}
   VAPID_SUBJECT: {{ . | quote }}
   {{- end }}
+  CLIPS_ENABLED: {{ .Values.config.clips.enabled | toString | quote }}
+  MEDIAMTX_PLAYBACK_URL: {{ .Values.config.clips.playbackUrl | quote }}
+  CLIP_PRE_SECONDS: {{ .Values.config.clips.preSeconds | toString | quote }}
+  CLIP_POST_SECONDS: {{ .Values.config.clips.postSeconds | toString | quote }}
   APP_ENV: {{ .Values.config.appEnv | default "production" | quote }}
   ALLOW_REGISTRATION: {{ .Values.config.allowRegistration | default false | toString | quote }}
   CONTENT_MANAGER_URL: {{ .Values.config.contentManagerUrl | default "http://content-manager:8181" | quote }}
