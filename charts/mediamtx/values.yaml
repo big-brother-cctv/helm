@@ -132,11 +132,13 @@ env:
   # MediaMTX ya incluye 'all_others:' activo por defecto en su configuración base, permitiendo auto-ingesta (/canal, /iphone, /obs)
 
 # Búfer de grabación para clips de alertas. Se guarda en RAM (emptyDir medium: Memory) para no
-# desgastar el disco con escritura continua: ~150 MB por cámara emitiendo (10 min a ~2 Mbit/s).
-# La RAM del búfer cuenta para el límite de memoria del pod (ver resources).
+# desgastar el disco con escritura continua. Tamaño ≈ bitrate × deleteAfter por cámara emitiendo:
+# 5 min a 2 Mbit/s (720p) ≈ 75 MB; a 8 Mbit/s (1080p) ≈ 300 MB.
+# OJO: si el tmpfs supera sizeLimit, Kubernetes desaloja el pod. Los clips (35 s) solo necesitan
+# unos minutos de búfer. La RAM del búfer cuenta para el límite de memoria del pod (ver resources).
 recording:
   enabled: true
-  deleteAfter: "10m"
+  deleteAfter: "5m"
   segmentDuration: "10s"
   partDuration: "1s"
   # Tope del tmpfs; si se llena, MediaMTX no puede grabar más hasta que se borren segmentos
