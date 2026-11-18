@@ -12,6 +12,9 @@ mkdir -p "$OUTPUT_DIR"
 
 echo "📦 Packaging charts at '$CHARTS_DIR'..."
 for chart in "$CHARTS_DIR"/*/; do
+  if grep -q '^dependencies:' "$chart/Chart.yaml"; then
+    helm dependency update "$chart"
+  fi
   helm package "$chart" -d "$OUTPUT_DIR"
 done
 

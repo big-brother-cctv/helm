@@ -52,8 +52,9 @@ service:
   port: 5432
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+# Postgres no habla HTTP: un Ingress no sirve para nada y solo expone ruido.
 ingress:
-  enabled: true
+  enabled: false
   className: "traefik"
   annotations: {}
   hosts:

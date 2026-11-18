@@ -1,0 +1,3 @@
+# Dependencias del umbrella: se resuelven en CI con "helm dependency update"
+charts/big-brother/charts/
+charts/big-brother/Chart.lock

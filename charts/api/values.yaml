@@ -66,6 +66,9 @@ config:
   dbName: "bigbrother"
   dbSslMode: "disable"
   appEnv: "production"
+  # Retención de alertas y snapshots (0 = sin límite). El PVC suele compartir disco con otros servicios.
+  alertRetentionDays: 30
+  alertMaxStorageMB: 2048
   # Auto-registro público (POST /api/auth/register). Si se activa, solo crea usuarios "viewer".
   allowRegistration: false
   contentManagerUrl: "http://content-manager:8181"

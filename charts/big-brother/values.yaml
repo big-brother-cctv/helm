@@ -6,8 +6,11 @@ global:
   imagePullSecrets: []
 
 # PostgreSQL Database
+# fullnameOverride: las imágenes y los charts esperan nombres de servicio fijos
+# (api, mediamtx, mediamtx-api, postgres, api-secrets), igual que con un release por componente.
 postgres:
   enabled: true
+  fullnameOverride: postgres
   image:
     tag: "16-alpine"
   persistence:
@@ -24,10 +27,12 @@ postgres:
 # MediaMTX Streaming Server (RTSP, RTMP, HLS, WebRTC)
 mediamtx:
   enabled: true
+  fullnameOverride: mediamtx
 
 # Big Brother Core Go API
 api:
   enabled: true
+  fullnameOverride: api
   persistence:
     enabled: true
     size: 10Gi
@@ -39,7 +44,7 @@ api:
     dbUser: "admin"
     dbName: "bigbrother"
     dbSslMode: "disable"
-  # JWT_SECRET e INTERNAL_TOKEN se generan en el Secret "<release>-api-secrets"
+  # JWT_SECRET e INTERNAL_TOKEN se generan en el Secret "api-secrets"
   # (o usa secrets.existingSecret). Ver helm/charts/api/values.yaml
   secrets:
     existingSecret: ""
@@ -49,6 +54,7 @@ api:
 # Telescreen Web Dashboard (React 19 + HLS.js)
 telescreen:
   enabled: true
+  fullnameOverride: telescreen
   ingress:
     enabled: true
     className: "traefik"
@@ -61,11 +67,12 @@ telescreen:
 # Motion Detector Microservice (Local Snapshot Ingestion & Realtime Alerts)
 motion-detector:
   enabled: true
+  fullnameOverride: motion-detector
   config:
     apiUrl: "http://api:8080/api/alerts"
-    # Secret creado por el subchart api (release "big-brother" -> "big-brother-api-secrets")
+    # Secret creado por el subchart api (fullnameOverride: api -> "api-secrets")
     internalTokenSecret:
-      name: "big-brother-api-secrets"
+      name: "api-secrets"
       key: "INTERNAL_TOKEN"
     cooldownSeconds: "15"
     discordWebhook: ""
@@ -73,3 +80,4 @@ motion-detector:
 # Camera Agent (Physical USB /dev/video* or synthetic signal - disabled by default in cloud k8s)
 camera:
   enabled: false
+  fullnameOverride: camera
