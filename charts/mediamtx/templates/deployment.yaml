@@ -47,6 +47,25 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
+            {{- if .Values.recording.enabled }}
+            # Búfer rotativo de grabación (fMP4) para extraer clips por alerta
+            - name: MTX_PATHDEFAULTS_RECORD
+              value: "yes"
+            - name: MTX_PATHDEFAULTS_RECORDPATH
+              value: "/recordings/%path/%Y-%m-%d_%H-%M-%S-%f"
+            - name: MTX_PATHDEFAULTS_RECORDFORMAT
+              value: "fmp4"
+            - name: MTX_PATHDEFAULTS_RECORDPARTDURATION
+              value: {{ .Values.recording.partDuration | quote }}
+            - name: MTX_PATHDEFAULTS_RECORDSEGMENTDURATION
+              value: {{ .Values.recording.segmentDuration | quote }}
+            - name: MTX_PATHDEFAULTS_RECORDDELETEAFTER
+              value: {{ .Values.recording.deleteAfter | quote }}
+            - name: MTX_PLAYBACK
+              value: "yes"
+            - name: MTX_PLAYBACKADDRESS
+              value: ":9996"
+            {{- end }}
             {{- if eq .Values.auth.mode "http" }}
             # Cada acción (publish/read/api...) se valida contra la API de Big Brother
             - name: MTX_AUTHMETHOD
@@ -72,13 +91,27 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
+          {{- if or .Values.recording.enabled .Values.volumeMounts }}
           volumeMounts:
+            {{- if .Values.recording.enabled }}
+            - name: recordings
+              mountPath: /recordings
+            {{- end }}
+            {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
+            {{- end }}
           {{- end }}
-      {{- with .Values.volumes }}
+      {{- if or .Values.recording.enabled .Values.volumes }}
       volumes:
+        {{- if .Values.recording.enabled }}
+        - name: recordings
+          emptyDir:
+            medium: Memory
+            sizeLimit: {{ .Values.recording.sizeLimit }}
+        {{- end }}
+        {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

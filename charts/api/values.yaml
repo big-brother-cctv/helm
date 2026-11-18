@@ -79,6 +79,12 @@ config:
   contentManagerUrl: "http://content-manager:8181"
   # Service ClusterIP interno del chart mediamtx (la API de control ya no se publica en el LoadBalancer)
   mediamtxApiUrl: "http://mediamtx-api:9997"
+  # Clips de vídeo por alerta desde el búfer de grabación de MediaMTX (chart mediamtx: recording.*)
+  clips:
+    enabled: true
+    playbackUrl: "http://mediamtx-api:9996"
+    preSeconds: 30
+    postSeconds: 5
   mediamtxRtspHost: "mediamtx"
 
 # Secretos de la API (se guardan en un Secret, nunca en el ConfigMap).

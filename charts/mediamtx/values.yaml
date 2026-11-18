@@ -59,6 +59,12 @@ service:
       port: 8189
       targetPort: 8189
       protocol: TCP
+    # Playback (descarga de grabaciones): solo interno, lo usa la API para extraer clips
+    - name: playback
+      port: 9996
+      targetPort: 9996
+      protocol: TCP
+      public: false
     # API de control: NO se publica en el LoadBalancer; va en el Service interno "<fullname>-api"
     - name: api
       port: 9997
@@ -125,6 +131,17 @@ env:
   MTX_WEBRTCICESERVERS2_2_URL: "stun:stun.cloudflare.com:3478"
   # MediaMTX ya incluye 'all_others:' activo por defecto en su configuración base, permitiendo auto-ingesta (/canal, /iphone, /obs)
 
+# Búfer de grabación para clips de alertas. Se guarda en RAM (emptyDir medium: Memory) para no
+# desgastar el disco con escritura continua: ~150 MB por cámara emitiendo (10 min a ~2 Mbit/s).
+# La RAM del búfer cuenta para el límite de memoria del pod (ver resources).
+recording:
+  enabled: true
+  deleteAfter: "10m"
+  segmentDuration: "10s"
+  partDuration: "1s"
+  # Tope del tmpfs; si se llena, MediaMTX no puede grabar más hasta que se borren segmentos
+  sizeLimit: 600Mi
+
 # Autenticación de MediaMTX
 # - http: cada acción se valida contra la API de Big Brother (recomendado).
 #   Publicar: rtsp://publisher:<MEDIA_PUBLISH_TOKEN>@host:8554/<cámara>
@@ -138,7 +155,8 @@ auth:
 resources:
   limits:
     cpu: 1000m
-    memory: 512Mi
+    # Incluye el búfer de grabación en RAM (recording.sizeLimit)
+    memory: 1Gi
   requests:
     cpu: 100m
     memory: 128Mi
