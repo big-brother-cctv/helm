@@ -13,6 +13,10 @@ data:
   DB_SSLMODE: {{ .Values.config.dbSslMode | default "disable" | quote }}
   ALERT_RETENTION_DAYS: {{ .Values.config.alertRetentionDays | default 0 | toString | quote }}
   ALERT_MAX_STORAGE_MB: {{ .Values.config.alertMaxStorageMB | default 0 | toString | quote }}
+  TZ: {{ .Values.config.timezone | default "UTC" | quote }}
+  {{- with .Values.config.vapidSubject }}
+  VAPID_SUBJECT: {{ . | quote }}
+  {{- end }}
   APP_ENV: {{ .Values.config.appEnv | default "production" | quote }}
   ALLOW_REGISTRATION: {{ .Values.config.allowRegistration | default false | toString | quote }}
   CONTENT_MANAGER_URL: {{ .Values.config.contentManagerUrl | default "http://content-manager:8181" | quote }}

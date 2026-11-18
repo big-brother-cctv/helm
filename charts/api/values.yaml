@@ -66,6 +66,11 @@ config:
   dbName: "bigbrother"
   dbSslMode: "disable"
   appEnv: "production"
+  # Zona horaria de la API (hora que aparece en las notificaciones push)
+  timezone: "Europe/Madrid"
+  # Web Push: las claves VAPID se generan solas y se guardan en la BD. "subject" debe ser una URL
+  # https o un mailto: identificable (Apple rechaza valores inválidos).
+  vapidSubject: ""
   # Retención de alertas y snapshots (0 = sin límite). El PVC suele compartir disco con otros servicios.
   alertRetentionDays: 30
   alertMaxStorageMB: 2048
